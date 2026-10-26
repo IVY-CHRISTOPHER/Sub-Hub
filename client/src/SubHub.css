@@ -1,0 +1,232 @@
+/* ===== Sub-Hub design system =====
+   Colors live in variables ("tokens"). The light theme is the default; the dark theme
+   overrides them when <html data-theme="dark"> is set (done by the toggle in App.jsx). */
+
+:root {
+  --bg: #f4f5fb;
+  --bg-glow: radial-gradient(60rem 30rem at 85% -10%, rgba(124, 92, 255, 0.16), transparent 60%),
+             radial-gradient(40rem 24rem at -10% 10%, rgba(20, 184, 166, 0.12), transparent 60%);
+  --surface: #ffffff;
+  --surface-2: #f0f1f8;
+  --border: #e2e4f0;
+  --text: #14152b;
+  --muted: #666a85;
+  --accent: #6d4aff;
+  --accent-2: #14b8a6;
+  --danger: #d92d4b;
+  --danger-bg: rgba(217, 45, 75, 0.1);
+  --success: #0f9d7a;
+  --success-bg: rgba(15, 157, 122, 0.12);
+  --shadow: 0 1px 2px rgba(20, 21, 43, 0.05), 0 8px 24px rgba(20, 21, 43, 0.06);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  color-scheme: light;
+}
+
+[data-theme='dark'] {
+  --bg: #0b0c18;
+  --bg-glow: radial-gradient(60rem 30rem at 85% -10%, rgba(124, 92, 255, 0.28), transparent 60%),
+             radial-gradient(40rem 24rem at -10% 10%, rgba(20, 184, 166, 0.16), transparent 60%);
+  --surface: #14152a;
+  --surface-2: #1c1e38;
+  --border: #272a4a;
+  --text: #eef0ff;
+  --muted: #9a9dc0;
+  --accent: #8b6dff;
+  --accent-2: #2dd4bf;
+  --danger: #ff6b86;
+  --danger-bg: rgba(255, 107, 134, 0.14);
+  --success: #3ddbb0;
+  --success-bg: rgba(61, 219, 176, 0.14);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px rgba(0, 0, 0, 0.35);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg-glow), var(--bg);
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  transition: background-color 0.25s, color 0.25s;
+}
+
+h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.02em; margin: 0 0 0.25rem; }
+h3 { font-size: 1.05rem; }
+small { color: var(--muted); }
+ul { margin: 0; padding: 0; list-style: none; }
+
+/* ===== Layout ===== */
+.app { max-width: 960px; margin: 0 auto; padding: 1.5rem 1.25rem 4rem; }
+.row { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+.between { justify-content: space-between; }
+.app > header { margin-bottom: 1.5rem; }
+
+.brand { display: flex; align-items: center; gap: 0.6rem; }
+.brand h1 { font-size: 1.6rem; margin: 0; }
+.logo {
+  width: 2.2rem; height: 2.2rem; border-radius: 12px; display: grid; place-items: center;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff; font: 700 1.1rem var(--font-display);
+  box-shadow: 0 6px 16px rgba(109, 74, 255, 0.35);
+}
+
+/* ===== Cards ===== */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.25rem;
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: background-color 0.25s, border-color 0.25s;
+}
+.card h3 { margin: 0; }
+
+/* ===== Stat cards ===== */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0; }
+.stats .card { margin: 0; gap: 0.25rem; }
+.stats .card small { text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.72rem; font-weight: 600; }
+.stats strong { font: 700 1.9rem var(--font-display); letter-spacing: -0.03em; }
+/* The "Monthly total" card: a deep violet-to-teal gradient that slowly drifts.
+   Colors are kept dark enough that the white text stays easy to read. */
+.stats .card:first-child {
+  background: linear-gradient(120deg, #5b3df5, #3f55e0, #0e7fa8, #0f9488, #3f55e0, #5b3df5);
+  background-size: 300% 300%;
+  animation: drift 18s ease-in-out infinite;
+  border: 0;
+  color: #fff;
+  box-shadow: 0 10px 28px rgba(91, 61, 245, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+}
+.stats .card:first-child small { color: rgba(255, 255, 255, 0.88); }
+@keyframes drift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ===== Forms ===== */
+label { display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.85rem; font-weight: 500; color: var(--muted); }
+input, select {
+  font: inherit; color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.75rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+input:focus-visible, select:focus-visible {
+  outline: none; border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+input[type='checkbox'] { accent-color: var(--accent); width: 1rem; height: 1rem; padding: 0; }
+.auth { max-width: 400px; margin: 3rem auto; padding: 2rem; }
+.auth h2 { font-size: 1.6rem; }
+
+/* ===== Buttons ===== */
+button {
+  font: 500 0.875rem var(--font-body); color: var(--text);
+  background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 0.5rem 0.9rem; cursor: pointer;
+  transition: transform 0.1s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+button:hover:not(:disabled) { border-color: var(--accent); }
+button:active:not(:disabled) { transform: translateY(1px); }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+button.primary {
+  background: linear-gradient(135deg, var(--accent), #4f7cff);
+  color: #fff; border-color: transparent;
+  box-shadow: 0 6px 16px rgba(109, 74, 255, 0.3);
+}
+button.primary:hover:not(:disabled) { box-shadow: 0 8px 22px rgba(109, 74, 255, 0.45); border-color: transparent; }
+button.danger { color: var(--danger); background: var(--danger-bg); border-color: transparent; }
+button.danger:hover:not(:disabled) { border-color: var(--danger); }
+button.link { background: none; border: none; color: var(--accent); padding: 0.25rem; text-decoration: underline; }
+button.icon { width: 2.4rem; height: 2.4rem; padding: 0; display: grid; place-items: center; border-radius: 50%; font-size: 1.1rem; }
+/* Theme toggle icons: yellow sun, light grey moon. In light mode the button gets a dark background so the grey moon stays visible. */
+.sun { color: #facc15; }
+.moon { color: #c4c7d4; }
+[data-theme='light'] button.icon { background: #2b2d45; border-color: #2b2d45; }
+
+.error {
+  color: var(--danger); background: var(--danger-bg);
+  padding: 0.6rem 0.85rem; border-radius: var(--radius-sm); margin: 0; font-size: 0.875rem;
+}
+
+/* ===== Category breakdown ===== */
+.cats li { display: grid; gap: 0.3rem; margin-bottom: 0.6rem; }
+.cats .cat-top { display: flex; justify-content: space-between; font-size: 0.9rem; }
+.cats .cat-top span:last-child { color: var(--muted); }
+.bar { height: 8px; border-radius: 99px; background: var(--surface-2); overflow: hidden; }
+.bar > span { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+
+/* ===== Upcoming renewals ===== */
+.upcoming li {
+  display: flex; justify-content: space-between; gap: 1rem; align-items: center;
+  padding: 0.6rem 0; border-bottom: 1px solid var(--border);
+}
+.upcoming li:last-child { border-bottom: 0; }
+.upcoming .when { color: var(--muted); font-size: 0.85rem; }
+.chip {
+  background: var(--surface-2); border: 1px solid var(--border); border-radius: 99px;
+  padding: 0.1rem 0.6rem; font-size: 0.75rem; font-weight: 600; white-space: nowrap;
+}
+
+/* ===== Bank import list ===== */
+.detected li { padding: 0.4rem 0; }
+.detected label { flex-direction: row; align-items: center; gap: 0.6rem; color: var(--text); font-size: 0.95rem; }
+
+/* ===== Subscriptions table ===== */
+.table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+table { width: 100%; border-collapse: collapse; min-width: 680px; }
+th {
+  text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--muted); font-weight: 600; padding: 0.85rem 1rem; background: var(--surface-2);
+}
+td { padding: 0.85rem 1rem; border-top: 1px solid var(--border); vertical-align: middle; }
+tbody tr { transition: background-color 0.15s; }
+tbody tr:hover { background: var(--surface-2); }
+td .row { flex-wrap: nowrap; }
+td button { padding: 0.35rem 0.65rem; font-size: 0.8rem; }
+.paused td:not(:last-child) { opacity: 0.55; }
+.pill { border-radius: 99px; padding: 0.15rem 0.65rem; font-size: 0.75rem; font-weight: 600; text-transform: capitalize; }
+.pill.active { background: var(--success-bg); color: var(--success); }
+.pill.paused { background: var(--surface-2); color: var(--muted); }
+.empty { text-align: center; color: var(--muted); padding: 2rem 1rem; }
+
+section > h3 { margin: 1.5rem 0 0.75rem; }
+
+/* ===== Confirm dialog ===== */
+.confirm {
+  background: var(--surface); color: var(--text);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 1.5rem; max-width: 400px; width: calc(100% - 2rem); margin: auto; box-shadow: var(--shadow);
+}
+.confirm::backdrop { background: rgba(5, 6, 16, 0.6); backdrop-filter: blur(4px); }
+.confirm p { color: var(--muted); }
+.confirm .row { margin-top: 1rem; justify-content: flex-end; }
+.confirm[open] { animation: pop 0.18s ease-out; }
+@keyframes pop { from { opacity: 0; transform: scale(0.96) translateY(6px); } }
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+@media (max-width: 640px) {
+  .app { padding: 1rem 0.85rem 3rem; }
+  .stats strong { font-size: 1.6rem; }
+  .auth { margin: 1.5rem auto; padding: 1.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
